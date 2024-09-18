@@ -28,11 +28,11 @@ const contactShema = new Schema({
     required: true,
     enum: ['work', 'home', 'personal'],
     default: 'personal',
-  }, 
+  },  
 
+}, {
   timestamps: true,
   versionKey: false,
-
 });
 
 export const contactModel = model('contacts', contactShema);
