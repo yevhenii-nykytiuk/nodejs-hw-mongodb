@@ -37,20 +37,23 @@ export const startServer = () => {
 
     const contact = await getContactsById(contactId);
 
-    res.status(200).json({
-      contact,
-    });
+    if (contact) {
+      res.status(200).json({
+        status: 200,
+        message: `Successfully found contact with id ${contactId}!`,
+        data: contact,
+      });
+    } else {
+      res.status(404).json({
+        message: 'Student not found',
+      });
+    }
   });
+
 
   app.use('*', (req, res, next) => {
     console.log("Second middleware");
     next();
-  });
-
-  app.use('*', (req, res, next) => {
-    res.status(404).json({
-      message: "Not found"
-    });
   });
 
   app.use((err, req, res, next) => {
