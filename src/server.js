@@ -28,7 +28,9 @@ export const startServer = () => {
     const contacts = await getAllContacts();
 
     res.status(200).json({
-      contacts
+      status: 200,
+      message: "Successfully found contacts!",
+      data: contacts,
     });
   });
 
@@ -45,7 +47,7 @@ export const startServer = () => {
       });
     } else {
       res.status(404).json({
-        message: 'Student not found',
+        message: 'Not found contact',
       });
     }
   });
@@ -62,6 +64,7 @@ export const startServer = () => {
       error: err.message
     });
   });
+
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
