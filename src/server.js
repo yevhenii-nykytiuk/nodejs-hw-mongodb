@@ -4,6 +4,8 @@ import cors from 'cors';
 import { env } from '../src/utils/env.js';
 import { ENV_VARS } from './constants/index.js';
 import router from './routers/contacts.js';
+import { errorHandlerMiddleware } from '../src/middlewares/errorHandler.js';
+import { notFoundHandlerMiddleware } from '../src/middlewares/notFoundHandler.js';
 
 
 const PORT = env(ENV_VARS.PORT, 3000);
@@ -26,17 +28,9 @@ export const startServer = () => {
 
   app.use(router);
 
-  app.use('*', (req, res, next) => {
-    console.log("Second middleware");
-    next();
-  });
+  app.use(notFoundHandlerMiddleware);
 
-  app.use((err, req, res, next) => {
-    res.status(500).json({
-      message: 'Something went wrong',
-      error: err.message
-    });
-  });
+  app.use(errorHandlerMiddleware);
 
 
   app.listen(PORT, () => {
