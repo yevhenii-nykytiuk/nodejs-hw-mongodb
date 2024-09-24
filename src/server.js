@@ -3,7 +3,7 @@ import pino from 'pino-http';
 import cors from 'cors';
 import { env } from '../src/utils/env.js';
 import { ENV_VARS } from './constants/index.js';
-import { getAllContacts, getContactsById } from './services/contacts.js';
+import router from './routers/contacts.js';
 
 
 const PORT = env(ENV_VARS.PORT, 3000);
@@ -24,34 +24,7 @@ export const startServer = () => {
 
   app.use(cors());
 
-  app.get('/contacts', async (req, res) => {
-    const contacts = await getAllContacts();
-
-    res.status(200).json({
-      status: 200,
-      message: "Successfully found contacts!",
-      data: contacts,
-    });
-  });
-
-  app.get('/contacts/:contactId', async (req, res) => {
-    const { contactId } = req.params;
-
-    const contact = await getContactsById(contactId);
-
-    if (contact) {
-      res.status(200).json({
-        status: 200,
-        message: `Successfully found contact with id ${contactId}!`,
-        data: contact,
-      });
-    } else {
-      res.status(404).json({
-        message: 'Not found contact',
-      });
-    }
-  });
-
+  app.use(router);
 
   app.use('*', (req, res, next) => {
     console.log("Second middleware");
