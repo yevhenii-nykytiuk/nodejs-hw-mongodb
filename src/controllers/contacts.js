@@ -26,7 +26,13 @@ export const getContactByIdController = async (req, res, next) => {
   const contact = await getContactsById(contactId);
 
   if (!contact) {
-    return next(createHttpError(404, "Contact not found"));
+    const error = createHttpError(404, `Contact witch id ${contactId} not found!`);
+    error.data = {
+      timestamp: new Date().toISOString(),
+      requestedId: contactId,
+    };
+    
+    return next(error);
   }
 
     res.status(200).json({
@@ -53,7 +59,13 @@ export const updateContactController = async (req, res, next) => {
   const updateData = await updateContact(contactId, body);
 
   if (!updateData) {
-    return next(createHttpError(404, "Contact not found"));
+    const error = createHttpError(404, `Contact witch id ${contactId} not found!`);
+    error.data = {
+      timestamp: new Date().toISOString(),
+      requestedId: contactId,
+    };
+
+    return next(error);
   }
 
   res.status(200).send({
@@ -65,12 +77,19 @@ export const updateContactController = async (req, res, next) => {
 
 
 export const deleteContactByIdController = async (req, res, next) => {
+  
   const { contactId } = req.params;
 
   const contact = await deleteContactById(contactId);
 
   if (!contact) {
-    return next(createHttpError(404, "Contact not found"));
+    const error = createHttpError(404, `Contact witch id ${contactId} not found!`);
+    error.data = {
+      timestamp: new Date().toISOString(),
+      requestedId: contactId,
+    };
+
+    return next(error);
   }
 
   res.status(204).send();
